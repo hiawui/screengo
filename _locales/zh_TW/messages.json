@@ -1,0 +1,75 @@
+{
+  "extensionName": {
+    "message": "ScreenGo"
+  },
+  "extensionDescription": {
+    "message": "支援區域選擇的螢幕錄製擴充功能"
+  },
+  "startRecording": {
+    "message": "開始錄製"
+  },
+  "stopRecording": {
+    "message": "停止錄製"
+  },
+  "pauseRecording": {
+    "message": "暫停"
+  },
+  "resumeRecording": {
+    "message": "繼續"
+  },
+  "paused": {
+    "message": "已暫停"
+  },
+  "selectArea": {
+    "message": "選擇區域"
+  },
+  "recording": {
+    "message": "錄製中..."
+  },
+  "recordingStopped": {
+    "message": "錄製已停止"
+  },
+  "selectRecordingArea": {
+    "message": "選擇錄製區域"
+  },
+  "dragToSelect": {
+    "message": "拖曳選擇區域，按ESC取消"
+  },
+  "systemAudio": {
+    "message": "系統音訊"
+  },
+  "microphone": {
+    "message": "麥克風"
+  },
+  "audio": {
+    "message": "音訊"
+  },
+  "format": {
+    "message": "格式"
+  },
+  "webm": {
+    "message": "WebM"
+  },
+  "mp4": {
+    "message": "MP4"
+  },
+  "language": {
+    "message": "語言"
+  },
+  "saving": {
+    "message": "儲存中..."
+  },
+  "saved": {
+    "message": "已儲存"
+  },
+  "error": {
+    "message": "錯誤"
+  },
+  "noStream": {
+    "message": "取得螢幕串流失敗"
+  },
+  "noAreaSelected": {
+    "message": "請先選擇錄製區域"
+  }
+}
+

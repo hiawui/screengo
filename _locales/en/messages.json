@@ -1,0 +1,75 @@
+{
+  "extensionName": {
+    "message": "ScreenGo"
+  },
+  "extensionDescription": {
+    "message": "Screen recording extension with area selection support"
+  },
+  "startRecording": {
+    "message": "Start Recording"
+  },
+  "stopRecording": {
+    "message": "Stop Recording"
+  },
+  "pauseRecording": {
+    "message": "Pause"
+  },
+  "resumeRecording": {
+    "message": "Resume"
+  },
+  "paused": {
+    "message": "Paused"
+  },
+  "selectArea": {
+    "message": "Select Area"
+  },
+  "recording": {
+    "message": "Recording..."
+  },
+  "recordingStopped": {
+    "message": "Recording Stopped"
+  },
+  "selectRecordingArea": {
+    "message": "Select recording area"
+  },
+  "dragToSelect": {
+    "message": "Drag to select area, press ESC to cancel"
+  },
+  "systemAudio": {
+    "message": "System Audio"
+  },
+  "microphone": {
+    "message": "Microphone"
+  },
+  "audio": {
+    "message": "Audio"
+  },
+  "format": {
+    "message": "Format"
+  },
+  "webm": {
+    "message": "WebM"
+  },
+  "mp4": {
+    "message": "MP4"
+  },
+  "language": {
+    "message": "Language"
+  },
+  "saving": {
+    "message": "Saving..."
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "error": {
+    "message": "Error"
+  },
+  "noStream": {
+    "message": "Failed to get screen stream"
+  },
+  "noAreaSelected": {
+    "message": "Please select a recording area first"
+  }
+}
+

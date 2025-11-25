@@ -1,0 +1,75 @@
+{
+  "extensionName": {
+    "message": "ScreenGo"
+  },
+  "extensionDescription": {
+    "message": "Extensión de grabación de pantalla con soporte para selección de área"
+  },
+  "startRecording": {
+    "message": "Iniciar Grabación"
+  },
+  "stopRecording": {
+    "message": "Detener Grabación"
+  },
+  "pauseRecording": {
+    "message": "Pausar"
+  },
+  "resumeRecording": {
+    "message": "Reanudar"
+  },
+  "paused": {
+    "message": "Pausado"
+  },
+  "selectArea": {
+    "message": "Seleccionar Área"
+  },
+  "recording": {
+    "message": "Grabando..."
+  },
+  "recordingStopped": {
+    "message": "Grabación Detenida"
+  },
+  "selectRecordingArea": {
+    "message": "Seleccionar área de grabación"
+  },
+  "dragToSelect": {
+    "message": "Arrastra para seleccionar área, presiona ESC para cancelar"
+  },
+  "systemAudio": {
+    "message": "Audio del Sistema"
+  },
+  "microphone": {
+    "message": "Micrófono"
+  },
+  "audio": {
+    "message": "Audio"
+  },
+  "format": {
+    "message": "Formato"
+  },
+  "webm": {
+    "message": "WebM"
+  },
+  "mp4": {
+    "message": "MP4"
+  },
+  "language": {
+    "message": "Idioma"
+  },
+  "saving": {
+    "message": "Guardando..."
+  },
+  "saved": {
+    "message": "Guardado"
+  },
+  "error": {
+    "message": "Error"
+  },
+  "noStream": {
+    "message": "Error al obtener el flujo de pantalla"
+  },
+  "noAreaSelected": {
+    "message": "Por favor selecciona un área de grabación primero"
+  }
+}
+

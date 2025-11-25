@@ -1,0 +1,75 @@
+{
+  "extensionName": {
+    "message": "ScreenGo"
+  },
+  "extensionDescription": {
+    "message": "支持区域选择的屏幕录制扩展"
+  },
+  "startRecording": {
+    "message": "开始录制"
+  },
+  "stopRecording": {
+    "message": "停止录制"
+  },
+  "pauseRecording": {
+    "message": "暂停"
+  },
+  "resumeRecording": {
+    "message": "继续"
+  },
+  "paused": {
+    "message": "已暂停"
+  },
+  "selectArea": {
+    "message": "选择区域"
+  },
+  "recording": {
+    "message": "录制中..."
+  },
+  "recordingStopped": {
+    "message": "录制已停止"
+  },
+  "selectRecordingArea": {
+    "message": "选择录制区域"
+  },
+  "dragToSelect": {
+    "message": "拖拽选择区域，按ESC取消"
+  },
+  "systemAudio": {
+    "message": "系统音频"
+  },
+  "microphone": {
+    "message": "麦克风"
+  },
+  "audio": {
+    "message": "音频"
+  },
+  "format": {
+    "message": "格式"
+  },
+  "webm": {
+    "message": "WebM"
+  },
+  "mp4": {
+    "message": "MP4"
+  },
+  "language": {
+    "message": "语言"
+  },
+  "saving": {
+    "message": "保存中..."
+  },
+  "saved": {
+    "message": "已保存"
+  },
+  "error": {
+    "message": "错误"
+  },
+  "noStream": {
+    "message": "获取屏幕流失败"
+  },
+  "noAreaSelected": {
+    "message": "请先选择录制区域"
+  }
+}
+

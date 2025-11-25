@@ -1,0 +1,50 @@
+# Cursor Rules
+
+## Language Requirements
+
+1. **Conversation Language**: All agent responses and explanations should be in Chinese (中文). This includes:
+   - Explanations of code changes
+   - Answers to questions
+   - Error messages and troubleshooting guidance
+   - Documentation and comments in conversation
+
+2. **Code Comments**: All code comments must be written in English. This includes:
+   - Inline comments
+   - Block comments
+   - JSDoc/TSDoc comments
+   - Function and class documentation comments
+   - TODO comments
+   - Any explanatory text within code files
+
+## Examples
+
+✅ **Correct - Conversation (Chinese)**:
+"我将为你添加一个新的功能函数。"
+
+✅ **Correct - Code Comment (English)**:
+```typescript
+// Initialize the i18n service
+const i18n = new I18n();
+```
+
+❌ **Incorrect - Code Comment (Chinese)**:
+```typescript
+// 初始化国际化服务
+const i18n = new I18n();
+```
+
+## Additional Guidelines
+
+- When writing code, always use English for:
+  - Variable names (use descriptive English names)
+  - Function names
+  - Class names
+  - Type definitions
+  - Error messages in code (console.log, throw statements)
+  
+- When explaining code to the user, always use Chinese for:
+  - Describing what the code does
+  - Explaining why changes were made
+  - Providing context and rationale
+  - Answering questions about the codebase
+

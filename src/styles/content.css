@@ -1,0 +1,244 @@
+/* content.css - Content script styles */
+
+#screengo-control-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 320px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  display: none;
+}
+
+#screengo-control-panel.visible {
+  display: block;
+}
+
+#screengo-control-panel .header {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+  user-select: none;
+}
+
+#screengo-control-panel .title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+#screengo-control-panel .close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+#screengo-control-panel .close-btn:hover {
+  background: #f0f0f0;
+}
+
+#screengo-control-panel .content {
+  padding: 16px;
+}
+
+#screengo-control-panel .section {
+  margin-bottom: 16px;
+}
+
+#screengo-control-panel .section:last-child {
+  margin-bottom: 0;
+}
+
+#screengo-control-panel .section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#screengo-control-panel .button {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#screengo-control-panel .button-primary {
+  background: #4CAF50;
+  color: white;
+}
+
+#screengo-control-panel .button-primary:hover {
+  background: #45a049;
+}
+
+#screengo-control-panel .button-primary:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+#screengo-control-panel .button-secondary {
+  background: #2196F3;
+  color: white;
+}
+
+#screengo-control-panel .button-secondary:hover {
+  background: #0b7dda;
+}
+
+#screengo-control-panel .button-danger {
+  background: #f44336;
+  color: white;
+}
+
+#screengo-control-panel .button-danger:hover {
+  background: #da190b;
+}
+
+#screengo-control-panel .button:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+#screengo-control-panel .status {
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+#screengo-control-panel .status.recording {
+  background: #ffebee;
+  color: #c62828;
+}
+
+#screengo-control-panel .status.paused {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+#screengo-control-panel .status.idle {
+  background: #f5f5f5;
+  color: #666;
+}
+
+#screengo-control-panel .checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#screengo-control-panel .checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#screengo-control-panel .checkbox-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+#screengo-control-panel .checkbox-item label {
+  cursor: pointer;
+  user-select: none;
+}
+
+#screengo-control-panel .select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#screengo-control-panel select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+#screengo-control-panel select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+#screengo-control-panel .recording-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #f44336;
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+#screengo-control-panel .recording-indicator.paused {
+  background: #ff9800;
+  animation: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Selection Box Handles */
+.screengo-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: transparent;
+  border: none;
+  pointer-events: auto;
+  z-index: 1000000;
+}
+
+.screengo-handle-nw { top: -5px; left: -5px; cursor: nw-resize; }
+.screengo-handle-ne { top: -5px; right: -5px; cursor: ne-resize; }
+.screengo-handle-se { bottom: -5px; right: -5px; cursor: se-resize; }
+.screengo-handle-sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+
+/* Draggable borders (invisible but clickable) */
+.screengo-border {
+  position: absolute;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.screengo-border-n { top: -5px; left: 0; width: 100%; height: 10px; cursor: n-resize; }
+.screengo-border-e { top: 0; right: -5px; height: 100%; width: 10px; cursor: e-resize; }
+.screengo-border-s { bottom: -5px; left: 0; width: 100%; height: 10px; cursor: s-resize; }
+.screengo-border-w { top: 0; left: -5px; height: 100%; width: 10px; cursor: w-resize; }
