@@ -70,6 +70,29 @@
   },
   "noAreaSelected": {
     "message": "請先選擇錄製區域"
+  },
+  "previewTitle": {
+    "message": "錄製預覽"
+  },
+  "loadingPreview": {
+    "message": "正在載入預覽..."
+  },
+  "discard": {
+    "message": "捨棄"
+  },
+  "downloadWebM": {
+    "message": "下載 WebM"
+  },
+  "exportToMp4": {
+    "message": "匯出 MP4"
+  },
+  "exporting": {
+    "message": "匯出中..."
+  },
+  "showMiniPanel": {
+    "message": "顯示迷你面板"
+  },
+  "settings": {
+    "message": "設定"
   }
 }
-

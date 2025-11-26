@@ -70,6 +70,29 @@
   },
   "noAreaSelected": {
     "message": "Please select a recording area first"
+  },
+  "previewTitle": {
+    "message": "Recording Preview"
+  },
+  "loadingPreview": {
+    "message": "Loading preview..."
+  },
+  "discard": {
+    "message": "Discard"
+  },
+  "downloadWebM": {
+    "message": "Download WebM"
+  },
+  "exportToMp4": {
+    "message": "Export to MP4"
+  },
+  "exporting": {
+    "message": "Exporting..."
+  },
+  "showMiniPanel": {
+    "message": "Show Mini Panel"
+  },
+  "settings": {
+    "message": "Settings"
   }
 }
-

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { ScreenRecorder } from '../services/recorder';
-import type { SelectedArea, RecordingFormat, AudioOptions } from '../types';
+import type { SelectedArea, AudioOptions } from '../types';
 
 export function useRecorder() {
   const [selectedArea, setSelectedArea] = useState<SelectedArea | null>(null);
@@ -11,12 +11,13 @@ export function useRecorder() {
   const startTimeRef = useRef<number | null>(null);
   const pauseStartTimeRef = useRef<number | null>(null);
   const totalPausedTimeRef = useRef<number>(0);
+  const detectedFpsRef = useRef<number>(30);
   
   // Read recording state from recorder instance (don't update it)
   // Use a state to trigger re-renders when recording state changes
   const [recordingState, setRecordingState] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [countdown, setCountdown] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<number>(0);
   const [recordingDuration, setRecordingDuration] = useState(0);
   
   // Periodically read recording state from recorder instance
@@ -82,9 +83,16 @@ export function useRecorder() {
       
       const filename = recorderRef.current.getFilename();
       
-      console.log('Saving file...');
-      await saveFile(blob, filename);
-      console.log('File saved successfully');
+      // FPS detection logic moved inside recorder.ts but we need it here to pass to preview page.
+      // We can get it from recorder instance if we expose it or change getBlob/stopRecording flow.
+      // Actually, getBlob just returns blob. 
+      // But we modified startRecording to return FPS. Let's use a ref to store detected FPS.
+      
+      // We will use the fpsRef value which should have been set during startRecording
+      const fps = detectedFpsRef.current || 30;
+      
+      console.log('Using detected/default FPS:', fps);
+      await openPreviewPage(blob, filename, fps);
       
       recorderRef.current.cleanup();
       recorderRef.current = null;
@@ -98,6 +106,7 @@ export function useRecorder() {
       pauseStartTimeRef.current = null;
       totalPausedTimeRef.current = 0;
       setRecordingDuration(0);
+      setCountdown(0);
     } catch (error) {
       console.error('Error handling recording stop:', error);
       // Cleanup even if save fails
@@ -133,7 +142,6 @@ export function useRecorder() {
 
   const startRecording = useCallback(async (
     area: SelectedArea | null,
-    format: RecordingFormat,
     audioOptions: AudioOptions
   ) => {
     try {
@@ -148,7 +156,7 @@ export function useRecorder() {
         setCountdown(i);
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
-      setCountdown(null);
+      setCountdown(0.1);
       await new Promise(resolve => setTimeout(resolve, 100));
 
       streamRef.current = stream;
@@ -157,14 +165,18 @@ export function useRecorder() {
         recorderRef.current = new ScreenRecorder();
       }
 
-      await recorderRef.current.startRecording(
+      const fps = await recorderRef.current.startRecording(
         stream, 
         area, 
-        format, 
         audioOptions,
         // Unified onStop callback for both manual and system stop
         handleRecordingStop
       );
+      
+      if (typeof fps === 'number') {
+        detectedFpsRef.current = fps;
+        console.log('Set detected FPS:', fps);
+      }
 
       startTimeRef.current = Date.now();
       pauseStartTimeRef.current = null;
@@ -299,8 +311,8 @@ async function getScreenStream(sources: string[] = ['screen', 'window', 'tab']):
   });
 }
 
-async function saveFile(blob: Blob, filename: string): Promise<void> {
-  console.log(`Starting to save file: ${filename}, type: ${blob.type}, size: ${blob.size}`);
+async function openPreviewPage(blob: Blob, filename: string, fps?: number): Promise<void> {
+  console.log(`Starting to open preview for: ${filename}, type: ${blob.type}, size: ${blob.size}, fps: ${fps}`);
   
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -318,55 +330,38 @@ async function saveFile(blob: Blob, filename: string): Promise<void> {
         }
         
         const resultStr = reader.result as string;
-        // Find the base64 separator, handling cases where MIME type includes parameters with commas
-        // e.g., "data:video/webm;codecs=vp9,opus;base64,..."
         const base64Prefix = ';base64,';
         const base64Index = resultStr.indexOf(base64Prefix);
         
         if (base64Index === -1) {
-          console.error('No base64 separator found in data URL:', resultStr.substring(0, 100));
-          reject(new Error('Invalid data URL format: missing base64 separator'));
+          console.error('No base64 separator found in data URL');
+          reject(new Error('Invalid data URL format'));
           return;
         }
         
         const base64data = resultStr.substring(base64Index + base64Prefix.length);
-        console.log(`resultStr: ${resultStr.substring(0, 100)}`);
-        console.log(`base64data: ${base64data.substring(0, 100)}`);
-
-        console.log(`Parsed base64 data: ${base64data.length} characters (expected ~${Math.ceil(blob.size * 4/3)} for ${blob.size} bytes)`);
         
-        if (base64data.length < 100) {
-          console.error('Base64 data too short, full result:', resultStr);
-          reject(new Error('Base64 data is too short, blob may not be ready'));
-          return;
-        }
-        
-        // Use sendMessage with proper error handling
         chrome.runtime.sendMessage(
           {
-            action: 'downloadFile',
+            action: 'openPreview',
             blobData: base64data,
             blobType: blob.type,
-            filename: filename
+            filename: filename,
+            fps: fps || 30 // Pass FPS, default to 30
           },
           (response) => {
-            // Check for runtime errors first
             if (chrome.runtime.lastError) {
               const errorMsg = chrome.runtime.lastError.message || 'Unknown error';
-              // Ignore "message port closed" error if response was received
-              if (errorMsg.includes('message port closed') && response) {
-                // If we got a response before port closed, consider it success
-                if (response.success) {
-                  resolve();
-                  return;
-                }
+              if (errorMsg.includes('message port closed') && response?.success) {
+                resolve();
+                return;
               }
               reject(new Error(errorMsg));
               return;
             }
 
-            if (!response || !response.success) {
-              reject(new Error(response?.error || 'Failed to download'));
+            if (!response?.success) {
+              reject(new Error(response?.error || 'Failed to open preview'));
               return;
             }
 
@@ -384,8 +379,8 @@ async function saveFile(blob: Blob, filename: string): Promise<void> {
       reject(new Error('Failed to read blob'));
     };
     
-    console.log('Starting FileReader.readAsDataURL...');
     reader.readAsDataURL(blob);
   });
 }
+
 

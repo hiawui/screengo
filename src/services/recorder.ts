@@ -1,6 +1,6 @@
 // recorder.ts - Recording logic encapsulation
 
-import type { SelectedArea, RecordingFormat, AudioOptions } from '../types';
+import type { SelectedArea, AudioOptions } from '../types';
 
 // Recording configuration constants
 const RECORDER_CONFIG = {
@@ -15,7 +15,6 @@ const MIME_TYPES = {
   WEBM_VP8_OPUS: 'video/webm;codecs=vp8,opus',
   WEBM_VP9: 'video/webm;codecs=vp9',
   WEBM: 'video/webm',
-  MP4: 'video/mp4',
 } as const;
 
 export class ScreenRecorder {
@@ -33,7 +32,7 @@ export class ScreenRecorder {
   private transformStreamController: AbortController | null = null;
   
   // Configuration
-  private format: RecordingFormat = 'webm';
+  // private format: RecordingFormat = 'webm'; // Removed
   
   // Callbacks
   private onStopCallback?: () => void;
@@ -45,13 +44,13 @@ export class ScreenRecorder {
   async startRecording(
     stream: MediaStream,
     area: SelectedArea | null = null,
-    format: RecordingFormat = 'webm',
-    audioOptions: AudioOptions = { systemAudio: true, microphone: false },
+    // format removed
+    audioOptions: AudioOptions = { systemAudio: true, microphone: false, fps: 30 }, // Default to 30
     onStop?: () => void
-  ): Promise<boolean> {
+  ): Promise<number> { // Return detected FPS instead of boolean
     // Initialize recording state
     this.stream = stream;
-    this.format = format;
+    // this.format = format; // Removed
     this.recordedChunks = [];
     this.isRecording = true;
     this.isPaused = false;
@@ -60,17 +59,25 @@ export class ScreenRecorder {
 
     try {
       this.recordingStream = await this.prepareRecordingStream(stream, area, audioOptions);
-      const mimeType = this.selectMimeType(format);
+      const mimeType = this.selectMimeType();
       this.createMediaRecorder(this.recordingStream, mimeType);
       
       this.mediaRecorder!.start(RECORDER_CONFIG.TIMESLICE);
+      
+      // Try to get actual framerate from video track settings
+      const videoTrack = this.recordingStream.getVideoTracks()[0];
+      const settings = videoTrack?.getSettings();
+      // Chrome often reports 'frameRate' in settings
+      const streamFps = settings?.frameRate;
+      
       console.log('Recording started', {
         state: this.mediaRecorder?.state,
         videoTracks: this.recordingStream.getVideoTracks().length,
-        audioTracks: this.recordingStream.getAudioTracks().length
+        audioTracks: this.recordingStream.getAudioTracks().length,
+        detectedFps: streamFps
       });
       
-      return true;
+      return streamFps || 30; // Return detected FPS or default 30
     } catch (error) {
       console.error('Failed to start recording:', error);
       this.isRecording = false;
@@ -139,11 +146,6 @@ export class ScreenRecorder {
     // Stop stream tracks
     this.stopStreamTracks();
     
-    // Convert format if needed
-    if (this.format === 'mp4' && blob.type.includes('webm')) {
-      return await this.convertWebmToMp4(blob);
-    }
-    
     return blob;
   }
 
@@ -171,8 +173,7 @@ export class ScreenRecorder {
 
   getFilename(): string {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-    const extension = this.format === 'mp4' ? 'mp4' : 'webm';
-    return `screengo-${timestamp}.${extension}`;
+    return `screengo-${timestamp}.webm`;
   }
 
   // ============================================================================
@@ -225,18 +226,7 @@ export class ScreenRecorder {
   // MIME Type Selection
   // ============================================================================
 
-  private selectMimeType(format: RecordingFormat): string {
-    if (format === 'mp4') {
-      return this.selectMp4MimeType();
-    }
-    return this.selectWebmMimeType();
-  }
-
-  private selectMp4MimeType(): string {
-    if (MediaRecorder.isTypeSupported(MIME_TYPES.MP4)) {
-      return MIME_TYPES.MP4;
-    }
-    // Fallback to WebM for conversion
+  private selectMimeType(): string {
     return this.selectWebmMimeType();
   }
 
@@ -286,7 +276,7 @@ export class ScreenRecorder {
     if (event.data && event.data.size > 0) {
       this.recordedChunks.push(event.data);
     } else {
-      console.warn('Data available but size is 0');
+      console.info('Data available but size is 0');
     }
   }
 
@@ -327,12 +317,6 @@ export class ScreenRecorder {
         track.stop();
       }
     });
-  }
-
-  private async convertWebmToMp4(webmBlob: Blob): Promise<Blob> {
-    // TODO: Implement FFmpeg.wasm conversion
-    console.warn('MP4 conversion not implemented. Returning WebM format.');
-    return webmBlob;
   }
 
   // ============================================================================

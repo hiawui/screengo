@@ -1,117 +1,110 @@
-# ScreenGo - Chrome屏幕录制扩展
+# ScreenGo - Chrome 屏幕录制扩展
 
-一个功能强大的Chrome扩展，支持屏幕录制、区域选择和多格式导出。
+ScreenGo 是一个功能强大的 Chrome 浏览器扩展，支持全屏、窗口及标签页录制，并提供高性能的区域裁剪功能。它基于现代 Web 技术栈构建，界面简洁美观，使用体验流畅。
 
-## 功能特性
+## ✨ 主要特性
 
-- 🎥 屏幕录制：支持整个屏幕、窗口或标签页录制
-- 📐 区域选择：拖拽选择录制区域
-- 🎵 音频录制：支持系统音频和麦克风
-- 📦 多格式导出：支持WebM和MP4格式
-- 🌍 多语言支持：英文、简体中文、繁体中文、西班牙语
-- 🎨 现代化UI：使用React构建的简洁美观的控制面板
+- **🎥 多模式录制**：支持录制整个屏幕、特定应用窗口或 Chrome 标签页。
+- **📐 高性能区域裁剪**：使用 `OffscreenCanvas` 和 `WebCodecs` API 实现的零延迟区域裁剪。
+- **🎵 音频支持**：可同时录制系统音频和麦克风声音（支持回声消除和降噪）。
+- **💾 导出格式**：默认导出为高质量 WebM 格式 (VP8/VP9/Opus)。
+- **🌍 多语言支持**：内置英文、简体中文、繁体中文、西班牙语支持，自动跟随系统语言。
+- **🎨 现代化 UI**：基于 React 18 构建的响应式控制面板，支持拖拽移动。
+- **⏱️ 实用工具**：包含录制倒计时、实时时长显示、状态指示器。
 
-## 技术栈
+## 🛠️ 技术栈
 
-- **React 18** - UI框架
-- **TypeScript** - 类型安全
-- **Vite** - 构建工具
-- **Chrome Extension Manifest V3**
+- **UI 框架**: [React 18](https://react.dev/)
+- **构建工具**: [Vite 5](https://vitejs.dev/)
+- **语言**: [TypeScript](https://www.typescriptlang.org/)
+- **扩展规范**: Chrome Extension Manifest V3
+- **核心 API**:
+  - `desktopCapture`: 屏幕捕获
+  - `MediaRecorder`: 媒体流录制
+  - `OffscreenCanvas`: 离屏渲染
+  - `MediaStreamTrackProcessor/Generator`: 视频流处理
 
-## 开发
+## 🚀 安装说明
+
+1. **下载构建产物**
+   - 克隆本项目并构建（见下文开发指南）。
+   - 或者下载最新的发布包解压。
+
+2. **加载到 Chrome**
+   - 打开 Chrome 浏览器，访问 `chrome://extensions/`。
+   - 打开右上角的 **"开发者模式"** 开关。
+   - 点击左上角的 **"加载已解压的扩展程序"**。
+   - 选择项目中的 `dist` 目录。
+
+## 📖 使用指南
+
+1. **启动录制**
+   - 点击浏览器工具栏中的 ScreenGo 图标，打开控制面板。
+   - (可选) 点击 **"选择区域"** 按钮，在屏幕上拖拽选择要录制的特定区域。
+   - (可选) 勾选 **"系统音频"** 或 **"麦克风"**。
+   - 点击 **"开始录制"**。
+
+2. **录制控制**
+   - 录制过程中，你可以随时点击控制面板上的 **"暂停"** / **"继续"** 按钮。
+   - 拖拽控制面板标题栏可将其移动到不遮挡视线的位置。
+
+3. **结束与保存**
+   - 点击 **"停止录制"** 按钮。
+   - 录制文件将自动下载到你的默认下载文件夹。
+
+## 💻 开发指南
 
 ### 环境要求
+- Node.js 20+ (推荐使用 nvm)
+- npm 10+
 
-- Node.js 20+ (推荐使用 nvm 管理版本)
-
-### 使用 nvm 管理 Node.js 版本
-
-如果已安装 nvm，在项目根目录运行：
+### 常用命令
 
 ```bash
-# 使用项目指定的 Node.js 版本
-nvm use
-
-# 如果版本未安装，nvm 会提示安装命令
-# 例如：nvm install 20
-```
-
-### 安装依赖
-
-```bash
+# 安装依赖
 npm install
-```
 
-### 开发模式
-
-```bash
+# 启动开发模式 (支持热更新)
 npm run dev
-```
 
-这会启动Vite的watch模式，自动重新构建。
-
-### 构建
-
-```bash
+# 构建生产版本
 npm run build
+
+# 打包扩展 (生成 .zip 文件，自动同步版本号)
+npm run package
+
+# 仅打包不生成 zip
+npm run package:no-zip
 ```
 
-构建产物在 `dist/` 目录。
-
-### 打包
-
-```bash
-./package.sh
-```
-
-这会构建项目并创建zip文件。
-
-## 项目结构
+### 项目结构
 
 ```
 screengo/
 ├── src/
-│   ├── components/        # React组件
-│   │   └── ControlPanel.tsx
-│   ├── hooks/            # React Hooks
-│   │   └── useRecorder.ts
-│   ├── services/         # 业务逻辑
-│   │   ├── i18n.ts
-│   │   ├── recorder.ts
-│   │   └── selector.ts
-│   ├── styles/           # 样式文件
-│   │   └── content.css
-│   ├── types/            # TypeScript类型
-│   │   └── index.ts
-│   ├── content.tsx       # Content script入口
-│   └── background.ts     # Background script
-├── _locales/             # 多语言资源
-├── icons/                # 图标文件
-├── manifest.json         # 扩展配置
-├── vite.config.ts        # Vite配置
-├── tsconfig.json         # TypeScript配置
-└── package.json          # 项目配置
+│   ├── components/     # React UI 组件 (控制面板等)
+│   ├── services/       # 核心业务逻辑
+│   │   ├── recorder.ts # 录制与流处理逻辑
+│   │   ├── selector.ts # 区域选择与 Overlay 逻辑
+│   │   └── i18n.ts     # 国际化服务
+│   ├── hooks/          # React Hooks
+│   ├── background.ts   # Service Worker
+│   └── content.tsx     # Content Script 入口
+├── _locales/           # 多语言资源文件
+├── scripts/            # 自动化脚本 (如打包脚本)
+├── public/             # 静态资源
+└── dist/               # 构建输出目录
 ```
 
-## 安装
+## 🔒 权限说明
 
-1. 构建项目：`npm run build`
-2. 打开Chrome浏览器，访问 `chrome://extensions/`
-3. 启用"开发者模式"
-4. 点击"加载已解压的扩展程序"
-5. 选择 `dist` 目录
+本扩展仅申请实现功能所必需的权限：
 
-## 使用说明
+- `desktopCapture`:用于捕获屏幕画面。
+- `activeTab`: 用于在当前标签页注入控制面板。
+- `storage`: 用于保存用户偏好设置（如语言选择）。
+- `downloads`: 用于将录制好的视频文件保存到本地。
 
-1. 访问任意网页
-2. 点击扩展图标显示控制面板
-3. 点击"选择区域"按钮，拖拽选择录制区域
-4. 选择音频选项（系统音频/麦克风）
-5. 选择导出格式（WebM/MP4）
-6. 点击"开始录制"按钮
-7. 录制完成后点击"停止录制"
-8. 文件将自动下载
+## 📄 许可证
 
-## 许可证
-
-BSD 3-Clause License
+[BSD 3-Clause License](LICENSE)

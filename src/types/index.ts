@@ -1,5 +1,10 @@
 // Type definitions
 
+export interface Position {
+  left: number;
+  top: number;
+}
+
 export interface SelectedArea {
   x: number;
   y: number;
@@ -12,15 +17,6 @@ export interface AudioOptions {
   microphone: boolean;
 }
 
-export type RecordingFormat = 'webm' | 'mp4';
-
-export interface RecordingState {
-  isRecording: boolean;
-  selectedArea: SelectedArea | null;
-  format: RecordingFormat;
-  audioOptions: AudioOptions;
-}
-
 export interface I18nMessage {
   message: string;
   description?: string;
@@ -29,4 +25,3 @@ export interface I18nMessage {
 export interface I18nMessages {
   [key: string]: I18nMessage;
 }
-

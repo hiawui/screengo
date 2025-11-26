@@ -70,6 +70,29 @@
   },
   "noAreaSelected": {
     "message": "请先选择录制区域"
+  },
+  "previewTitle": {
+    "message": "录制预览"
+  },
+  "loadingPreview": {
+    "message": "正在加载预览..."
+  },
+  "discard": {
+    "message": "丢弃"
+  },
+  "downloadWebM": {
+    "message": "下载 WebM"
+  },
+  "exportToMp4": {
+    "message": "导出 MP4"
+  },
+  "exporting": {
+    "message": "导出中..."
+  },
+  "showMiniPanel": {
+    "message": "显示迷你面板"
+  },
+  "settings": {
+    "message": "设置"
   }
 }
-

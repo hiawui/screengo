@@ -70,6 +70,29 @@
   },
   "noAreaSelected": {
     "message": "Por favor selecciona un área de grabación primero"
+  },
+  "previewTitle": {
+    "message": "Vista Previa de Grabación"
+  },
+  "loadingPreview": {
+    "message": "Cargando vista previa..."
+  },
+  "discard": {
+    "message": "Descartar"
+  },
+  "downloadWebM": {
+    "message": "Descargar WebM"
+  },
+  "exportToMp4": {
+    "message": "Exportar a MP4"
+  },
+  "exporting": {
+    "message": "Exportando..."
+  },
+  "showMiniPanel": {
+    "message": "Mostrar Mini Panel"
+  },
+  "settings": {
+    "message": "Configuración"
   }
 }
-
