@@ -106,7 +106,6 @@ export function useRecorder() {
       pauseStartTimeRef.current = null;
       totalPausedTimeRef.current = 0;
       setRecordingDuration(0);
-      setCountdown(0);
     } catch (error) {
       console.error('Error handling recording stop:', error);
       // Cleanup even if save fails
@@ -188,6 +187,8 @@ export function useRecorder() {
     } catch (error) {
       console.error('Failed to start recording:', error);
       throw error;
+    } finally {
+      setCountdown(0);
     }
   }, [handleRecordingStop]);
 

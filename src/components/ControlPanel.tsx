@@ -323,24 +323,32 @@ export const ControlPanel: React.FC = () => {
 
         <button
           className="button"
-          disabled={!isRecording}
+          disabled={countdown > 0}
           onClick={(e) => {
             e.stopPropagation();
-            isPaused ? resumeRecording() : pauseRecording();
+            if (!isRecording) {
+              handleStartRecording();
+            } else {
+              isPaused ? resumeRecording() : pauseRecording();
+            }
           }}
           style={{
             padding: '4px 12px',
             fontSize: '13px',
             borderRadius: '15px',
-            background: isPaused ? '#3b82f6' : '#f3f4f6',
-            color: isPaused ? 'white' : (isRecording ? '#374151' : '#9ca3af'),
+            background: !isRecording ? '#ef4444' : (isPaused ? '#3b82f6' : '#f3f4f6'),
+            color: !isRecording ? 'white' : (isPaused ? 'white' : (isRecording ? '#374151' : '#9ca3af')),
             border: 'none',
-            cursor: isRecording ? 'pointer' : 'not-allowed',
-            transition: 'all 0.2s'
+            cursor: (isRecording || countdown === 0) ? 'pointer' : 'not-allowed',
+            transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '32px'
           }}
-          title={isPaused ? t('resumeRecording') : t('pauseRecording')}
+          title={!isRecording ? t('startRecording') : (isPaused ? t('resumeRecording') : t('pauseRecording'))}
         >
-          {isPaused ? '▶' : '⏸'}
+          {!isRecording ? '●' : (isPaused ? '▶' : '⏸')}
         </button>
 
         <button

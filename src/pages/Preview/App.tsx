@@ -164,29 +164,35 @@ export default function App() {
         <h1>{t('previewTitle')}</h1>
       </header>
       
-      <main>
+      <main className="main-content">
         {error && <div className="error-message">{error}</div>}
         
-        <div className="video-container">
-          {videoUrl && (
-            <video 
-              ref={videoRef} 
-              src={videoUrl} 
-              controls 
-              autoPlay 
-              className="preview-video"
-            />
-          )}
-        </div>
+        <div className="content-split">
+          <div className="preview-area">
+            <div className="video-container">
+              {videoUrl && (
+                <video 
+                  ref={videoRef} 
+                  src={videoUrl} 
+                  controls 
+                  autoPlay 
+                  className="preview-video"
+                />
+              )}
+            </div>
+          </div>
 
-        <div className="actions">
-          <div className="right-actions">
-            <button className="btn primary" onClick={handleDownload} disabled={isExporting}>
-              {t('downloadWebM')}
-            </button>
-            <button className="btn primary" onClick={handleExportMp4} disabled={isExporting}>
-              {isExporting ? t('exporting') : t('exportToMp4')}
-            </button>
+          <div className="controls-area">
+            <div className="control-group">
+              <div className="action-buttons">
+                <button className="btn primary full-width" onClick={handleDownload} disabled={isExporting}>
+                  {t('downloadWebM')}
+                </button>
+                <button className="btn primary full-width" onClick={handleExportMp4} disabled={isExporting}>
+                  {isExporting ? t('exporting') : t('exportToMp4')}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>

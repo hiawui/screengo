@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 100%; /* Changed from 1200px to use full width */
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -37,6 +37,27 @@ h1 {
   font-size: 24px;
 }
 
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow flex items to shrink */
+}
+
+.content-split {
+  display: flex;
+  flex: 1;
+  gap: 20px;
+  min-height: 0;
+}
+
+.preview-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .video-container {
   flex: 1;
   background: #000;
@@ -45,7 +66,6 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
@@ -56,15 +76,24 @@ h1 {
   height: auto;
 }
 
-.actions {
+.controls-area {
+  width: 300px;
+  flex-shrink: 0;
   display: flex;
-  justify-content: flex-end;
-  padding: 20px 0;
+  flex-direction: column;
 }
 
-.right-actions {
+.control-group {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.action-buttons {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .btn {
@@ -98,6 +127,12 @@ h1 {
 
 .btn.secondary:hover {
   background-color: #d5d5d5;
+}
+
+.btn.full-width {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
 }
 
 .error-message {
