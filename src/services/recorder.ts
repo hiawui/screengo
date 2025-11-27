@@ -23,7 +23,6 @@ export class ScreenRecorder {
   private recordedChunks: Blob[] = [];
   private isRecording: boolean = false;
   private isPaused: boolean = false;
-  private isSystemStop: boolean = false;  // Track if stop was triggered by system
   
   // Resources
   private stream: MediaStream | null = null;
@@ -32,7 +31,6 @@ export class ScreenRecorder {
   private transformStreamController: AbortController | null = null;
   
   // Configuration
-  // private format: RecordingFormat = 'webm'; // Removed
   
   // Callbacks
   private onStopCallback?: () => void;
@@ -44,17 +42,14 @@ export class ScreenRecorder {
   async startRecording(
     stream: MediaStream,
     area: SelectedArea | null = null,
-    // format removed
-    audioOptions: AudioOptions = { systemAudio: true, microphone: false, fps: 30 }, // Default to 30
+    audioOptions: AudioOptions = { systemAudio: true, microphone: false},
     onStop?: () => void
   ): Promise<number> { // Return detected FPS instead of boolean
     // Initialize recording state
     this.stream = stream;
-    // this.format = format; // Removed
     this.recordedChunks = [];
     this.isRecording = true;
     this.isPaused = false;
-    this.isSystemStop = false;
     this.onStopCallback = onStop;
 
     try {
@@ -70,13 +65,6 @@ export class ScreenRecorder {
       // Chrome often reports 'frameRate' in settings
       const streamFps = settings?.frameRate;
       
-      console.log('Recording started', {
-        state: this.mediaRecorder?.state,
-        videoTracks: this.recordingStream.getVideoTracks().length,
-        audioTracks: this.recordingStream.getAudioTracks().length,
-        detectedFps: streamFps
-      });
-      
       return streamFps || 30; // Return detected FPS or default 30
     } catch (error) {
       console.error('Failed to start recording:', error);
@@ -89,11 +77,6 @@ export class ScreenRecorder {
     if (!this.mediaRecorder || !this.isRecording) {
       return;
     }
-    
-    console.log('Stopping recording...', {
-      state: this.mediaRecorder.state,
-      chunksBeforeStop: this.recordedChunks.length
-    });
     
     // Request final data before stopping
     if (this.mediaRecorder.state === 'recording') {
@@ -110,7 +93,6 @@ export class ScreenRecorder {
     if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
       this.mediaRecorder.pause();
       this.isPaused = true;
-      console.log('Recording paused', { state: this.mediaRecorder.state });
     }
   }
 
@@ -118,7 +100,6 @@ export class ScreenRecorder {
     if (this.mediaRecorder && this.mediaRecorder.state === 'paused') {
       this.mediaRecorder.resume();
       this.isPaused = false;
-      console.log('Recording resumed', { state: this.mediaRecorder.state });
     }
   }
 
@@ -141,8 +122,6 @@ export class ScreenRecorder {
     const mimeType = this.mediaRecorder?.mimeType || MIME_TYPES.WEBM;
     const blob = new Blob(this.recordedChunks, { type: mimeType });
     
-    console.log('Blob created:', blob.size, 'bytes,', this.recordedChunks.length, 'chunks');
-    
     // Stop stream tracks
     this.stopStreamTracks();
     
@@ -164,7 +143,6 @@ export class ScreenRecorder {
     this.mediaRecorder = null;
     this.isRecording = false;
     this.isPaused = false;
-    this.isSystemStop = false;
   }
 
   getRecordingState(): boolean {
@@ -197,21 +175,12 @@ export class ScreenRecorder {
       throw new Error('No video tracks available in recording stream');
     }
     
-    console.log('Recording stream info:', {
-      videoTracks: videoTracks.length,
-      audioTracks: recordingStream.getAudioTracks().length,
-      videoSettings: videoTracks[0]?.getSettings()
-    });
-    
     // Setup track listeners for system stop (browser's stop button)
     videoTracks.forEach(track => {
       track.addEventListener('ended', () => {
-        console.log('Video track ended - browser stopped sharing');
         // If still recording, it means browser stopped (not manual stop)
         // Manual stop sets isRecording to false before tracks end
         if (this.isRecording && this.mediaRecorder?.state === 'recording') {
-          console.log('System stop detected');
-          this.isSystemStop = true;
           
           // Trigger stop process - callback will be called in handleMediaRecorderStop
           this.stopRecording();
@@ -240,7 +209,6 @@ export class ScreenRecorder {
     
     for (const type of types) {
       if (MediaRecorder.isTypeSupported(type)) {
-        console.log('Selected mimeType:', type);
         return type;
       }
     }
@@ -275,19 +243,13 @@ export class ScreenRecorder {
   private handleMediaRecorderDataAvailable(event: BlobEvent): void {
     if (event.data && event.data.size > 0) {
       this.recordedChunks.push(event.data);
-    } else {
-      console.info('Data available but size is 0');
     }
   }
 
   private handleMediaRecorderStop(): void {
-    console.log('MediaRecorder onstop event fired', { isSystemStop: this.isSystemStop });
-    
     // Call onStop callback for both manual and system stop
     // No delay needed - all chunks are already collected when onstop fires
     if (this.onStopCallback) {
-      const stopType = this.isSystemStop ? 'system' : 'manual';
-      console.log(`Calling onStopCallback for ${stopType} stop`);
       this.onStopCallback();
     }
   }
@@ -298,10 +260,7 @@ export class ScreenRecorder {
   }
 
   private handleMediaRecorderStart(): void {
-    console.log('MediaRecorder started', {
-      state: this.mediaRecorder?.state,
-      mimeType: this.mediaRecorder?.mimeType
-    });
+    // Recording started
   }
 
   // ============================================================================
@@ -311,7 +270,6 @@ export class ScreenRecorder {
   private stopStreamTracks(): void {
     if (!this.stream) return;
     
-    console.log('Stopping stream tracks');
     this.stream.getTracks().forEach(track => {
       if (track.readyState === 'live') {
         track.stop();

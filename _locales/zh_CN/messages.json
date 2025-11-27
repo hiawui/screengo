@@ -44,9 +44,6 @@
   "audio": {
     "message": "音频"
   },
-  "format": {
-    "message": "格式"
-  },
   "webm": {
     "message": "WebM"
   },
@@ -64,12 +61,6 @@
   },
   "error": {
     "message": "错误"
-  },
-  "noStream": {
-    "message": "获取屏幕流失败"
-  },
-  "noAreaSelected": {
-    "message": "请先选择录制区域"
   },
   "previewTitle": {
     "message": "录制预览"

@@ -73,13 +73,9 @@ export function useRecorder() {
     if (!recorderRef.current) return;
     
     try {
-      console.log('Handling recording stop (callback from recorder)...');
-      
       // stopRecording has already been called and completed
       // All chunks have been collected, safe to get blob
-      console.log('Getting blob...');
       const blob = await recorderRef.current.getBlob();
-      console.log('Blob received:', { size: blob.size, type: blob.type });
       
       const filename = recorderRef.current.getFilename();
       
@@ -91,7 +87,6 @@ export function useRecorder() {
       // We will use the fpsRef value which should have been set during startRecording
       const fps = detectedFpsRef.current || 30;
       
-      console.log('Using detected/default FPS:', fps);
       await openPreviewPage(blob, filename, fps);
       
       recorderRef.current.cleanup();
@@ -121,7 +116,6 @@ export function useRecorder() {
 
   const stopRecording = useCallback(() => {
     if (recorderRef.current) {
-      console.log('Manually stopping recording...');
       // Just call stopRecording, handleRecordingStop will be called by onStop callback
       recorderRef.current.stopRecording();
     }
@@ -155,6 +149,7 @@ export function useRecorder() {
         setCountdown(i);
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
+      // Set countdown to 0.1 to hide countdown and prevent the main panel from being shown
       setCountdown(0.1);
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -174,7 +169,6 @@ export function useRecorder() {
       
       if (typeof fps === 'number') {
         detectedFpsRef.current = fps;
-        console.log('Set detected FPS:', fps);
       }
 
       startTimeRef.current = Date.now();
@@ -188,7 +182,9 @@ export function useRecorder() {
       console.error('Failed to start recording:', error);
       throw error;
     } finally {
-      setCountdown(0);
+      setTimeout(() => {
+        setCountdown(0);
+      }, 100);
     }
   }, [handleRecordingStop]);
 
@@ -206,64 +202,57 @@ export function useRecorder() {
   };
 }
 
-// 1. 声明自定义接口，继承标准的 DisplayMediaStreamOptions
-interface ChromeDisplayMediaOptions extends DisplayMediaStreamOptions {
-  // 显式定义这两个非标准属性的类型
-  selfBrowserSurface?: 'include' | 'exclude';
-  preferCurrentTab?: boolean;
-}
-
 async function getScreenStream(sources: string[] = ['screen', 'window', 'tab']): Promise<MediaStream | null> {
   // If sources only contains 'currentTab', use getDisplayMedia API directly
   if (sources.length === 1 && sources[0] === 'currentTab') {
-    try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
-        throw new Error('getDisplayMedia is not supported');
-      }
-      
-      const options: ChromeDisplayMediaOptions = {
-        video: {
-          displaySurface: 'browser',
-        },
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: false,
-        },
-        selfBrowserSurface: 'include',
-        preferCurrentTab: true,
-      }
-      const stream = await navigator.mediaDevices.getDisplayMedia(options);
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(
+        { action: 'getTabStreamId' },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message));
+            return;
+          }
 
-      // Verify stream has active tracks
-      const videoTracks = stream.getVideoTracks();
-      const audioTracks = stream.getAudioTracks();
-      
-      console.log('Stream obtained:', {
-        videoTracks: videoTracks.length,
-        audioTracks: audioTracks.length,
-        videoState: videoTracks[0]?.readyState,
-        videoSettings: videoTracks[0]?.getSettings()
-      });
+          if (!response || !response.success) {
+            reject(new Error(response?.error || 'Failed to get tab stream'));
+            return;
+          }
 
-      // Ensure at least one video track is available
-      if (videoTracks.length === 0) {
-        throw new Error('No video track available in stream');
-      }
+          // Use streamId to get MediaStream
+          const constraints: any = {
+            audio: {
+              mandatory: {
+                chromeMediaSource: 'tab',
+                chromeMediaSourceId: response.streamId
+              }
+            },
+            video: {
+              mandatory: {
+                chromeMediaSource: 'tab',
+                chromeMediaSourceId: response.streamId,
+                minWidth: window.innerWidth,
+                minHeight: window.innerHeight,
+                maxWidth: window.innerWidth * window.devicePixelRatio,
+                maxHeight: window.innerHeight * window.devicePixelRatio
+              }
+            }
+          };
 
-      // Listen for track ended events
-      videoTracks.forEach(track => {
-        track.addEventListener('ended', () => {
-          console.log('Video track ended by user or system');
-        });
-      });
-
-      return stream;
-    } catch (error: any) {
-      throw new Error(error.message || 'Failed to get display media');
-    }
+          // Chrome extensions need to use legacy getUserMedia API for tabCapture streams
+          const nav = navigator as any;
+          if (nav.getUserMedia) {
+            nav.getUserMedia(constraints, resolve, reject);
+          } else if (nav.webkitGetUserMedia) {
+            nav.webkitGetUserMedia(constraints, resolve, reject);
+          } else {
+            reject(new Error('getUserMedia is not supported'));
+          }
+        }
+      );
+    });
   }
-  
+
   // Otherwise, use the Chrome extension API through background script
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(
@@ -313,18 +302,11 @@ async function getScreenStream(sources: string[] = ['screen', 'window', 'tab']):
 }
 
 async function openPreviewPage(blob: Blob, filename: string, fps?: number): Promise<void> {
-  console.log(`Starting to open preview for: ${filename}, type: ${blob.type}, size: ${blob.size}, fps: ${fps}`);
-  
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     
     reader.onloadend = () => {
       try {
-        console.log('FileReader finished reading', {
-          resultType: typeof reader.result,
-          resultLength: reader.result ? (reader.result as string).length : 0
-        });
-        
         if (!reader.result) {
           reject(new Error('FileReader result is empty'));
           return;

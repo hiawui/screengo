@@ -44,9 +44,6 @@
   "audio": {
     "message": "音訊"
   },
-  "format": {
-    "message": "格式"
-  },
   "webm": {
     "message": "WebM"
   },
@@ -64,12 +61,6 @@
   },
   "error": {
     "message": "錯誤"
-  },
-  "noStream": {
-    "message": "取得螢幕串流失敗"
-  },
-  "noAreaSelected": {
-    "message": "請先選擇錄製區域"
   },
   "previewTitle": {
     "message": "錄製預覽"

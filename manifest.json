@@ -8,8 +8,8 @@
   "permissions": [
     "desktopCapture",
     "activeTab",
-    "storage",
-    "downloads"
+    "tabCapture",
+    "storage"
   ],
   "background": {
     "service_worker": "background.js",

@@ -44,9 +44,6 @@
   "audio": {
     "message": "Audio"
   },
-  "format": {
-    "message": "Format"
-  },
   "webm": {
     "message": "WebM"
   },
@@ -64,12 +61,6 @@
   },
   "error": {
     "message": "Error"
-  },
-  "noStream": {
-    "message": "Failed to get screen stream"
-  },
-  "noAreaSelected": {
-    "message": "Please select a recording area first"
   },
   "previewTitle": {
     "message": "Recording Preview"

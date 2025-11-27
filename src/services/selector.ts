@@ -341,7 +341,6 @@ export class AreaSelector {
     e.stopPropagation();
     
     const area = this.getSelectedArea();
-    console.log(`handleMouseUp area: ${area.width}, ${area.height}`);
     if (area.width > 10 && area.height > 10) {
       // Only confirm if selection area is large enough
       this.finishSelection(area);
@@ -445,7 +444,6 @@ export class AreaSelector {
   }
 
   private finishSelection(area: SelectedArea): void {
-    console.log(`finishSelection. area: ${area.width}, ${area.height}, callback: ${this.callback}`);
     // Save callback before cleanup
     const callback = this.callback;
     
@@ -473,7 +471,6 @@ export class AreaSelector {
     }
     
     if (callback) {
-      console.log('Calling callback with area:', area);
       callback(area);
     } else {
       console.warn('Callback is null, cannot execute');
@@ -481,12 +478,10 @@ export class AreaSelector {
   }
 
   private cancelSelection(): void {
-    console.log(`cancelSelection`);
     // Save callback before cleanup (cleanup sets callback to null)
     const callback = this.callback;
     this.cleanup();
     if (callback) {
-      console.log('Calling callback with null (cancelled)');
       callback(null);
     } else {
       console.warn('Callback is null, cannot execute');

@@ -34,11 +34,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // Return true to indicate async response
     return true;
   }
+
+  if (request.action === 'getTabStreamId') {
+    chrome.tabCapture.getMediaStreamId({ consumerTabId: sender.tab!.id }, (streamId) => {
+      if (streamId) {
+        sendResponse({ success: true, streamId: streamId });
+      } else {
+        sendResponse({ success: false, error: 'Failed to get tab media stream' });
+      }
+    });
+    return true;
+  }
   
   if (request.action === 'openPreview') {
     const { blobData, blobType, filename, fps } = request;
-    
-    console.log('Received preview data:', { type: blobType, filename, fps });
     
     // Store data in memory
     previewData = {
@@ -49,12 +58,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     };
 
     // Open preview page
-    chrome.tabs.create({ url: 'preview.html' }, (tab) => {
+    chrome.tabs.create({ url: 'preview.html' }, () => {
         if (chrome.runtime.lastError) {
              console.error('Failed to open preview tab:', chrome.runtime.lastError);
              sendResponse({ success: false, error: chrome.runtime.lastError.message });
         } else {
-             console.log('Preview tab opened:', tab.id);
              sendResponse({ success: true });
         }
     });
@@ -62,7 +70,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === 'getPreviewData') {
-    console.log('Preview page requested data');
     if (previewData) {
         sendResponse({ success: true, ...previewData });
     } else {

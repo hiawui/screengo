@@ -99,12 +99,8 @@ export default function App() {
       
       if (!ffmpeg.loaded) {
         const baseURL = chrome.runtime.getURL('assets');
-        console.log('Loading FFmpeg from:', baseURL);
         
         // Log messages from ffmpeg
-        ffmpeg.on('log', ({ message }) => {
-          console.log('FFmpeg Log:', message);
-        });
 
         await ffmpeg.load({
           coreURL: `${baseURL}/ffmpeg-core.js`,
@@ -115,10 +111,8 @@ export default function App() {
       const inputName = 'input.webm';
       const outputName = 'output.mp4';
       
-      console.log('Writing file to ffmpeg FS...');
       await ffmpeg.writeFile(inputName, await fetchFile(videoBlob));
       
-      console.log('Starting conversion...');
       // Add fast preset and lower resolution/crf for better performance in WASM
       await ffmpeg.exec([
         '-i', inputName, 
@@ -128,7 +122,6 @@ export default function App() {
         '-r', fps.toString(), // Use configured FPS
         outputName
       ]);
-      console.log('Conversion finished');
       
       const data = await ffmpeg.readFile(outputName);
       const mp4Blob = new Blob([data as any], { type: 'video/mp4' });
