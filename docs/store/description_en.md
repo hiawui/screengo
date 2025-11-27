@@ -6,7 +6,7 @@ ScreenGo is a modern, powerful, and easy-to-use screen recording extension for C
 Record your entire screen, a specific application window, or just a Chrome tab.
 
 📐 High-Performance Area Selection
-Zero-latency area cropping using advanced OffscreenCanvas technology. Simply drag to select the exact area you want to record.
+Zero-latency area cropping. Simply drag to select the exact area you want to record.
 
 🎵 Full Audio Support
 Record system audio and microphone input simultaneously. Perfect for creating narrated tutorials or recording online meetings.
@@ -22,7 +22,7 @@ All recordings are processed locally on your computer. No data is ever sent to t
 
 How to use:
 1. Click the ScreenGo icon in your toolbar.
-2. Choose to record the full screen, a window, or select a specific area.
+2. Choose to record the current page (with area selection), window, or full screen.
 3. Toggle system audio or microphone as needed.
 4. Click "Start Recording".
 

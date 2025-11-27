@@ -6,7 +6,7 @@ ScreenGo es una extensión de grabación de pantalla moderna, potente y fácil d
 Grabe toda su pantalla, una ventana de aplicación específica o solo una pestaña de Chrome.
 
 📐 Selección de Área de Alto Rendimiento
-Recorte de área con latencia cero utilizando tecnología avanzada OffscreenCanvas. Simplemente arrastre para seleccionar el área exacta que desea grabar.
+Recorte de área con latencia cero. Simplemente arrastre para seleccionar el área exacta que desea grabar.
 
 🎵 Soporte de Audio Completo
 Grabe el audio del sistema y la entrada del micrófono simultáneamente. Perfecto para crear tutoriales narrados o grabar reuniones en línea.
@@ -22,7 +22,7 @@ Todas las grabaciones se procesan localmente en su computadora. No se envían da
 
 Cómo usar:
 1. Haga clic en el icono de ScreenGo en su barra de herramientas.
-2. Elija grabar la pantalla completa, una ventana o seleccione un área específica.
+2. Elija grabar la página actual (con selección de área), una ventana o la pantalla completa.
 3. Active el audio del sistema o el micrófono según sea necesario.
 4. Haga clic en "Iniciar Grabación".
 
