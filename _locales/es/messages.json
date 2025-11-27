@@ -35,8 +35,8 @@
   "dragToSelect": {
     "message": "Arrastra para seleccionar área, presiona ESC para cancelar"
   },
-  "systemAudio": {
-    "message": "Audio del Sistema"
+  "tabAudio": {
+    "message": "Audio de la Pestaña"
   },
   "microphone": {
     "message": "Micrófono"

@@ -13,7 +13,7 @@ export interface SelectedArea {
 }
 
 export interface AudioOptions {
-  systemAudio: boolean;
+  tabAudio: boolean;
   microphone: boolean;
 }
 

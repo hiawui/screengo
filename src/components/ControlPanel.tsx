@@ -18,7 +18,7 @@ const formatDuration = (seconds: number): string => {
 export const ControlPanel: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [audioOptions, setAudioOptions] = useState<AudioOptions>({
-    systemAudio: true,
+    tabAudio: true,
     microphone: false
   });
   const [currentLang, setCurrentLang] = useState<string>(i18n.getLanguage());
@@ -416,15 +416,15 @@ export const ControlPanel: React.FC = () => {
                 <div className="checkbox-item">
                   <input
                     type="checkbox"
-                    id="screengo-system-audio"
-                    checked={audioOptions.systemAudio}
+                    id="screengo-tab-audio"
+                    checked={audioOptions.tabAudio}
                     onChange={(e) => {
-                      const newOptions = { ...audioOptions, systemAudio: e.target.checked };
+                      const newOptions = { ...audioOptions, tabAudio: e.target.checked };
                       setAudioOptions(newOptions);
                       storage.set({ [STORAGE_KEYS.AUDIO_OPTS]: newOptions });
                     }}
                   />
-                  <label htmlFor="screengo-system-audio">{t('systemAudio')}</label>
+                  <label htmlFor="screengo-tab-audio">{t('tabAudio')}</label>
                 </div>
                 <div className="checkbox-item">
                   <input

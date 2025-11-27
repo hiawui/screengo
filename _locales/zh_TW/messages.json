@@ -35,8 +35,8 @@
   "dragToSelect": {
     "message": "拖曳選擇區域，按ESC取消"
   },
-  "systemAudio": {
-    "message": "系統音訊"
+  "tabAudio": {
+    "message": "網頁聲音"
   },
   "microphone": {
     "message": "麥克風"

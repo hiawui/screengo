@@ -35,8 +35,8 @@
   "dragToSelect": {
     "message": "Drag to select area, press ESC to cancel"
   },
-  "systemAudio": {
-    "message": "System Audio"
+  "tabAudio": {
+    "message": "Tab Audio"
   },
   "microphone": {
     "message": "Microphone"
