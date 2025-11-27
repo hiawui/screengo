@@ -38,6 +38,9 @@
   "tabAudio": {
     "message": "网页声音"
   },
+  "systemAudio": {
+    "message": "系统声音"
+  },
   "microphone": {
     "message": "麦克风"
   },
@@ -85,5 +88,14 @@
   },
   "settings": {
     "message": "设置"
+  },
+  "sourceScreen": {
+    "message": "屏幕"
+  },
+  "sourceWindow": {
+    "message": "窗口"
+  },
+  "sourceTab": {
+    "message": "标签页"
   }
 }

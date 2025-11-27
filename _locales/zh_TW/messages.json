@@ -38,6 +38,9 @@
   "tabAudio": {
     "message": "網頁聲音"
   },
+  "systemAudio": {
+    "message": "系統聲音"
+  },
   "microphone": {
     "message": "麥克風"
   },
@@ -85,5 +88,14 @@
   },
   "settings": {
     "message": "設定"
+  },
+  "sourceScreen": {
+    "message": "螢幕"
+  },
+  "sourceWindow": {
+    "message": "視窗"
+  },
+  "sourceTab": {
+    "message": "分頁"
   }
 }

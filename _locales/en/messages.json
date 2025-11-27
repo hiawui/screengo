@@ -38,6 +38,9 @@
   "tabAudio": {
     "message": "Tab Audio"
   },
+  "systemAudio": {
+    "message": "System Audio"
+  },
   "microphone": {
     "message": "Microphone"
   },
@@ -85,5 +88,14 @@
   },
   "settings": {
     "message": "Settings"
+  },
+  "sourceScreen": {
+    "message": "Screen"
+  },
+  "sourceWindow": {
+    "message": "Window"
+  },
+  "sourceTab": {
+    "message": "Tab"
   }
 }

@@ -1,4 +1,4 @@
-import { AudioOptions, Position } from '../types';
+import { AudioOptions, Position, SourceType } from '../types';
 import { SupportedLanguage } from './i18n';
 
 // Define all storage keys
@@ -7,7 +7,8 @@ export const STORAGE_KEYS = {
   PANEL_POS_MAIN: 'panel_pos_main',
   PANEL_POS_MINI: 'panel_pos_mini',
   AUDIO_OPTS: 'audio_opts',
-  SHOW_MINI_PANEL: 'show_mini_panel'
+  SHOW_MINI_PANEL: 'show_mini_panel',
+  RECORDING_SOURCE: 'recording_source'
 } as const;
 
 // Define schema based on keys
@@ -17,6 +18,7 @@ export interface StorageSchema {
   [STORAGE_KEYS.PANEL_POS_MINI]?: Position;
   [STORAGE_KEYS.AUDIO_OPTS]?: AudioOptions;
   [STORAGE_KEYS.SHOW_MINI_PANEL]?: boolean;
+  [STORAGE_KEYS.RECORDING_SOURCE]?: SourceType;
 }
 
 class StorageService {

@@ -38,6 +38,9 @@
   "tabAudio": {
     "message": "Audio de la Pestaña"
   },
+  "systemAudio": {
+    "message": "Audio del Sistema"
+  },
   "microphone": {
     "message": "Micrófono"
   },
@@ -85,5 +88,14 @@
   },
   "settings": {
     "message": "Configuración"
+  },
+  "sourceScreen": {
+    "message": "Pantalla"
+  },
+  "sourceWindow": {
+    "message": "Ventana"
+  },
+  "sourceTab": {
+    "message": "Pestaña"
   }
 }

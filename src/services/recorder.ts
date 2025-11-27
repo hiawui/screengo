@@ -42,7 +42,7 @@ export class ScreenRecorder {
   async startRecording(
     stream: MediaStream,
     area: SelectedArea | null = null,
-    audioOptions: AudioOptions = { tabAudio: true, microphone: false},
+    audioOptions: AudioOptions = { systemAudio: true, microphone: false},
     onStop?: () => void
   ): Promise<number> { // Return detected FPS instead of boolean
     // Initialize recording state
@@ -291,7 +291,7 @@ export class ScreenRecorder {
     stream.getVideoTracks().forEach(track => newStream.addTrack(track));
     
     // Handle tab audio
-    if (audioOptions.tabAudio) {
+    if (audioOptions.systemAudio) {
       stream.getAudioTracks().forEach(track => newStream.addTrack(track));
     } else {
       stream.getAudioTracks().forEach(track => track.stop());

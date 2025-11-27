@@ -206,6 +206,39 @@
   animation: none;
 }
 
+/* Tabs */
+#screengo-control-panel .tabs {
+  display: flex;
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 4px;
+  margin-bottom: 16px;
+  gap: 4px;
+}
+
+#screengo-control-panel .tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 6px 4px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #666;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+#screengo-control-panel .tab-item.active {
+  background: white;
+  color: #333;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#screengo-control-panel .tab-item:hover:not(.active) {
+  background: rgba(255,255,255,0.5);
+}
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;

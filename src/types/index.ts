@@ -13,9 +13,11 @@ export interface SelectedArea {
 }
 
 export interface AudioOptions {
-  tabAudio: boolean;
+  systemAudio: boolean;
   microphone: boolean;
 }
+
+export type SourceType = 'screen' | 'window' | 'tab';
 
 export interface I18nMessage {
   message: string;

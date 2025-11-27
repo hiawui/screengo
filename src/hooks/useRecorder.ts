@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { ScreenRecorder } from '../services/recorder';
-import type { SelectedArea, AudioOptions } from '../types';
+import type { SelectedArea, AudioOptions, SourceType } from '../types';
 
 export function useRecorder() {
   const [selectedArea, setSelectedArea] = useState<SelectedArea | null>(null);
@@ -135,11 +135,12 @@ export function useRecorder() {
 
   const startRecording = useCallback(async (
     area: SelectedArea | null,
-    audioOptions: AudioOptions
+    audioOptions: AudioOptions,
+    sourceType: SourceType = 'tab'
   ) => {
     try {
       // Get screen stream
-      const stream = await getScreenStream(['currentTab']);
+      const stream = await getScreenStream(sourceType);
       if (!stream) {
         throw new Error('Failed to get screen stream');
       }
@@ -184,7 +185,7 @@ export function useRecorder() {
     } finally {
       setTimeout(() => {
         setCountdown(0);
-      }, 100);
+      }, 200);
     }
   }, [handleRecordingStop]);
 
@@ -202,102 +203,77 @@ export function useRecorder() {
   };
 }
 
-async function getScreenStream(sources: string[] = ['screen', 'window', 'tab']): Promise<MediaStream | null> {
-  // If sources only contains 'currentTab', use getDisplayMedia API directly
-  if (sources.length === 1 && sources[0] === 'currentTab') {
-    return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage(
-        { action: 'getTabStreamId' },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            reject(new Error(chrome.runtime.lastError.message));
-            return;
-          }
+// Helper function to handle stream response
+const handleStreamResponse = (
+  resolve: (value: MediaStream | PromiseLike<MediaStream | null>) => void,
+  reject: (reason?: any) => void,
+  response: any,
+  mediaSource: 'tab' | 'desktop'
+) => {
+  if (chrome.runtime.lastError) {
+    reject(new Error(chrome.runtime.lastError.message));
+    return;
+  }
 
-          if (!response || !response.success) {
-            reject(new Error(response?.error || 'Failed to get tab stream'));
-            return;
-          }
+  if (!response || !response.success) {
+    reject(new Error(response?.error || 'Failed to get stream'));
+    return;
+  }
 
-          // Use streamId to get MediaStream
-          const constraints: any = {
-            audio: {
-              mandatory: {
-                chromeMediaSource: 'tab',
-                chromeMediaSourceId: response.streamId
-              }
-            },
-            video: {
-              mandatory: {
-                chromeMediaSource: 'tab',
-                chromeMediaSourceId: response.streamId,
-                minWidth: window.innerWidth,
-                minHeight: window.innerHeight,
-                maxWidth: window.innerWidth * window.devicePixelRatio,
-                maxHeight: window.innerHeight * window.devicePixelRatio
-              }
-            }
-          };
+  // Use streamId to get MediaStream
+  const constraints: any = {
+    audio: {
+      mandatory: {
+        chromeMediaSource: mediaSource,
+        chromeMediaSourceId: response.streamId
+      }
+    },
+    video: {
+      mandatory: {
+        chromeMediaSource: mediaSource,
+        chromeMediaSourceId: response.streamId
+      }
+    }
+  };
 
-          // Chrome extensions need to use legacy getUserMedia API for tabCapture streams
-          const nav = navigator as any;
-          if (nav.getUserMedia) {
-            nav.getUserMedia(constraints, resolve, reject);
-          } else if (nav.webkitGetUserMedia) {
-            nav.webkitGetUserMedia(constraints, resolve, reject);
-          } else {
-            reject(new Error('getUserMedia is not supported'));
-          }
-        }
-      );
+  if (mediaSource === 'tab') {
+    Object.assign(constraints.video.mandatory, {
+      minWidth: window.innerWidth,
+      minHeight: window.innerHeight,
+      maxWidth: window.innerWidth * window.devicePixelRatio,
+      maxHeight: window.innerHeight * window.devicePixelRatio
     });
   }
 
-  // Otherwise, use the Chrome extension API through background script
+  // Chrome extensions need to use legacy getUserMedia API
+  const nav = navigator as any;
+  if (nav.getUserMedia) {
+    nav.getUserMedia(constraints, resolve, reject);
+  } else if (nav.webkitGetUserMedia) {
+    nav.webkitGetUserMedia(constraints, resolve, reject);
+  } else {
+    reject(new Error('getUserMedia is not supported'));
+  }
+};
+
+async function getScreenStream(source: SourceType = 'tab'): Promise<MediaStream | null> {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage(
-      { 
-        action: 'getScreenStream',
-        sources: sources
-      },
-      (response) => {
-        if (chrome.runtime.lastError) {
-          reject(new Error(chrome.runtime.lastError.message));
-          return;
-        }
-
-        if (!response || !response.success) {
-          reject(new Error(response?.error || 'Failed to get stream'));
-          return;
-        }
-
-        // Use streamId to get MediaStream
-        const constraints: any = {
-          audio: {
-            mandatory: {
-              chromeMediaSource: 'desktop',
-              chromeMediaSourceId: response.streamId
-            }
-          },
-          video: {
-            mandatory: {
-              chromeMediaSource: 'desktop',
-              chromeMediaSourceId: response.streamId
-            }
-          }
-        };
-
-        // Chrome extensions need to use legacy getUserMedia API
-        const nav = navigator as any;
-        if (nav.getUserMedia) {
-          nav.getUserMedia(constraints, resolve, reject);
-        } else if (nav.webkitGetUserMedia) {
-          nav.webkitGetUserMedia(constraints, resolve, reject);
-        } else {
-          reject(new Error('getUserMedia is not supported'));
-        }
-      }
-    );
+    if (source === 'tab') {
+      // Get streamId for the current tab from background script
+      chrome.runtime.sendMessage(
+        { action: 'getTabStreamId' },
+        (response) => handleStreamResponse(resolve, reject, response, 'tab')
+      );
+    } else {
+      // Otherwise, use the Chrome extension API through background script
+      chrome.runtime.sendMessage(
+        { 
+          action: 'getScreenStream',
+          sources: [source]
+        },
+        (response) => handleStreamResponse(resolve, reject, response, 'desktop')
+      );
+    }
   });
 }
 

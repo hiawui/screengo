@@ -5,7 +5,7 @@ import { useRecorder } from '../hooks/useRecorder';
 import { AreaSelector } from '../services/selector';
 import { i18n, t } from '../services/i18n';
 import { storage, STORAGE_KEYS } from '../services/storage';
-import type { SelectedArea, AudioOptions, Position } from '../types';
+import type { SelectedArea, AudioOptions, Position, SourceType } from '../types';
 // CSS is injected via manifest.json content_scripts.css
 
 const formatDuration = (seconds: number): string => {
@@ -18,9 +18,10 @@ const formatDuration = (seconds: number): string => {
 export const ControlPanel: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [audioOptions, setAudioOptions] = useState<AudioOptions>({
-    tabAudio: true,
+    systemAudio: true,
     microphone: false
   });
+  const [recordingSource, setRecordingSource] = useState<SourceType>('screen');
   const [currentLang, setCurrentLang] = useState<string>(i18n.getLanguage());
   const [isI18nReady, setIsI18nReady] = useState(false);
   const [mainPanelPosition, setMainPanelPosition] = useState<Position | null>(null);
@@ -105,7 +106,8 @@ export const ControlPanel: React.FC = () => {
       STORAGE_KEYS.PANEL_POS_MAIN, 
       STORAGE_KEYS.PANEL_POS_MINI,
       STORAGE_KEYS.AUDIO_OPTS,
-      STORAGE_KEYS.SHOW_MINI_PANEL
+      STORAGE_KEYS.SHOW_MINI_PANEL,
+      STORAGE_KEYS.RECORDING_SOURCE
     ]).then((result) => {
       if (result[STORAGE_KEYS.PANEL_POS_MAIN]) {
         setMainPanelPosition(result[STORAGE_KEYS.PANEL_POS_MAIN]!);
@@ -118,6 +120,9 @@ export const ControlPanel: React.FC = () => {
       }
       if (result[STORAGE_KEYS.SHOW_MINI_PANEL] !== undefined) {
         setShowMiniPanel(result[STORAGE_KEYS.SHOW_MINI_PANEL]!);
+      }
+      if (result[STORAGE_KEYS.RECORDING_SOURCE]) {
+        setRecordingSource(result[STORAGE_KEYS.RECORDING_SOURCE]!);
       }
     });
 
@@ -180,7 +185,7 @@ export const ControlPanel: React.FC = () => {
     try {
       // Allow recording with or without selected area
       // If area is null, record the entire screen/window
-      await startRecording(selectedArea, audioOptions);
+      await startRecording(selectedArea, audioOptions, recordingSource);
     } catch (error: any) {
       alert(t('error') + ': ' + error.message);
     }
@@ -400,14 +405,46 @@ export const ControlPanel: React.FC = () => {
             <div className={`status ${isRecording ? (isPaused ? 'paused' : 'recording') : 'idle'}`}>
               {t('recordingStopped')}
             </div>
+
+            <div className="tabs">
+              <div 
+                className={`tab-item ${recordingSource === 'tab' ? 'active' : ''}`}
+                onClick={() => {
+                  setRecordingSource('tab');
+                  storage.set({ [STORAGE_KEYS.RECORDING_SOURCE]: 'tab' });
+                }}
+              >
+                {t('sourceTab')}
+              </div>
+              <div 
+                className={`tab-item ${recordingSource === 'window' ? 'active' : ''}`}
+                onClick={() => {
+                  setRecordingSource('window');
+                  storage.set({ [STORAGE_KEYS.RECORDING_SOURCE]: 'window' });
+                }}
+              >
+                {t('sourceWindow')}
+              </div>
+              <div 
+                className={`tab-item ${recordingSource === 'screen' ? 'active' : ''}`}
+                onClick={() => {
+                  setRecordingSource('screen');
+                  storage.set({ [STORAGE_KEYS.RECORDING_SOURCE]: 'screen' });
+                }}
+              >
+                {t('sourceScreen')}
+              </div>
+            </div>
             
             <div className="section">
-              <button 
-                className="button button-secondary" 
-                onClick={handleSelectArea}
-              >
-                {t('selectArea')}
-              </button>
+              {recordingSource === 'tab' && (
+                <button 
+                  className="button button-secondary" 
+                  onClick={handleSelectArea}
+                >
+                  {t('selectArea')}
+                </button>
+              )}
             </div>
 
             <div className="section">
@@ -417,14 +454,16 @@ export const ControlPanel: React.FC = () => {
                   <input
                     type="checkbox"
                     id="screengo-tab-audio"
-                    checked={audioOptions.tabAudio}
+                    checked={audioOptions.systemAudio}
                     onChange={(e) => {
-                      const newOptions = { ...audioOptions, tabAudio: e.target.checked };
+                      const newOptions = { ...audioOptions, systemAudio: e.target.checked };
                       setAudioOptions(newOptions);
                       storage.set({ [STORAGE_KEYS.AUDIO_OPTS]: newOptions });
                     }}
                   />
-                  <label htmlFor="screengo-tab-audio">{t('tabAudio')}</label>
+                  <label htmlFor="screengo-tab-audio">
+                    {recordingSource === 'tab' ? t('tabAudio') : t('systemAudio')}
+                  </label>
                 </div>
                 <div className="checkbox-item">
                   <input
