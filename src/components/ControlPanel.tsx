@@ -21,7 +21,7 @@ export const ControlPanel: React.FC = () => {
     systemAudio: true,
     microphone: false
   });
-  const [recordingSource, setRecordingSource] = useState<SourceType>('screen');
+  const [recordingSource, setRecordingSource] = useState<SourceType>('tab');
   const [currentLang, setCurrentLang] = useState<string>(i18n.getLanguage());
   const [isI18nReady, setIsI18nReady] = useState(false);
   const [mainPanelPosition, setMainPanelPosition] = useState<Position | null>(null);
@@ -286,7 +286,7 @@ export const ControlPanel: React.FC = () => {
         style={{
           position: 'fixed',
           left: miniPanelPosition ? miniPanelPosition.left : 'auto',
-          top: miniPanelPosition ? miniPanelPosition.top : '20px',
+          top: miniPanelPosition ? miniPanelPosition.top : '530px',
           right: miniPanelPosition ? 'auto' : '20px',
           transform: 'none',
           background: '#fff',
