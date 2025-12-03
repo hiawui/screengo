@@ -11,8 +11,11 @@ Zero-latency area cropping. Simply drag to select the exact area you want to rec
 🎵 Full Audio Support
 Record system audio and microphone input simultaneously. Perfect for creating narrated tutorials or recording online meetings.
 
-💾 High-Quality Export
-Videos are exported in high-quality WebM format (VP8/VP9), ready for sharing or editing.
+✂️ Video Trimming & Preview
+Preview your recording immediately and use the built-in trimmer to keep only the best parts.
+
+💾 Multi-Format Export
+Export your recordings as WebM or MP4 files, ready for sharing on any platform.
 
 🎨 Modern & Clean UI
 A beautiful, responsive control panel that can be dragged anywhere on your screen, ensuring it never gets in your way.
@@ -25,6 +28,7 @@ How to use:
 2. Choose to record the current page (with area selection), window, or full screen.
 3. Toggle system audio or microphone as needed.
 4. Click "Start Recording".
+5. After recording, preview, trim, and export as WebM or MP4.
 
 GitHub Repository:
 https://github.com/hiawui/screengo

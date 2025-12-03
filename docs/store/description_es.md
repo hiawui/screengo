@@ -11,8 +11,11 @@ Recorte de área con latencia cero. Simplemente arrastre para seleccionar el ár
 🎵 Soporte de Audio Completo
 Grabe el audio del sistema y la entrada del micrófono simultáneamente. Perfecto para crear tutoriales narrados o grabar reuniones en línea.
 
-💾 Exportación de Alta Calidad
-Los videos se exportan en formato WebM de alta calidad (VP8/VP9), listos para compartir o editar.
+✂️ Recorte y Vista Previa de Video
+Obtenga una vista previa de su grabación de inmediato y use el recortador incorporado para conservar solo las mejores partes.
+
+💾 Exportación Multiformato
+Exporte sus grabaciones como archivos WebM o MP4, listos para compartir en cualquier plataforma.
 
 🎨 UI Moderna y Limpia
 Un panel de control hermoso y receptivo que se puede arrastrar a cualquier lugar de su pantalla, asegurando que nunca se interponga en su camino.
@@ -25,6 +28,7 @@ Cómo usar:
 2. Elija grabar la página actual (con selección de área), una ventana o la pantalla completa.
 3. Active el audio del sistema o el micrófono según sea necesario.
 4. Haga clic en "Iniciar Grabación".
+5. Después de grabar, previsualice, recorte y exporte como WebM o MP4.
 
 Repositorio GitHub:
 https://github.com/hiawui/screengo
