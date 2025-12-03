@@ -97,5 +97,20 @@
   },
   "sourceTab": {
     "message": "标签页"
+  },
+  "play": {
+    "message": "播放"
+  },
+  "pause": {
+    "message": "暂停"
+  },
+  "replayFromStart": {
+    "message": "从头播放"
+  },
+  "previousFrame": {
+    "message": "上一帧 (-$1秒)"
+  },
+  "nextFrame": {
+    "message": "下一帧 (+$1秒)"
   }
 }

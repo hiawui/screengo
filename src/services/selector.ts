@@ -84,7 +84,7 @@ export class AreaSelector {
       border: ${this.BORDER_SIZE}px dashed #4CAF50;
       background: transparent;
       pointer-events: none;
-      z-index: 999999;
+      z-index: 999998;
       display: block;
       cursor: move;
     `;

@@ -143,3 +143,119 @@ h1 {
   margin-bottom: 20px;
   text-align: center;
 }
+
+/* Video Trimmer Styles */
+.video-trimmer {
+  margin-top: 20px;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.trimmer-controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 15px;
+}
+
+.play-pause-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: #2196f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.play-pause-btn:hover {
+  background-color: #f0f7ff;
+}
+
+.trimmer-times {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  font-size: 12px;
+  color: #666;
+  font-family: monospace;
+}
+
+.current-time {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.trimmer-track-container {
+  position: relative;
+  height: 30px;
+  cursor: pointer;
+  user-select: none;
+  margin: 0 8px;
+}
+
+.trimmer-track-bg {
+  position: absolute;
+  top: 13px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+}
+
+.trimmer-selection {
+  position: absolute;
+  top: 13px;
+  height: 4px;
+  background-color: rgba(33, 150, 243, 0.2);
+  z-index: 1;
+}
+
+.trimmer-selection-played {
+  position: absolute;
+  top: 13px;
+  height: 4px;
+  background-color: #2196f3;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.trimmer-handle {
+  position: absolute;
+  top: 5px;
+  width: 16px;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #2196f3;
+  border-radius: 4px;
+  cursor: ew-resize;
+  z-index: 3;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trimmer-handle::after {
+  content: '';
+  width: 2px;
+  height: 10px;
+  background-color: #e0e0e0;
+  display: block;
+}
+
+.trimmer-handle:hover, .trimmer-handle:active {
+  z-index: 4;
+  background-color: #f5f5f5;
+  border-color: #1976d2;
+}

@@ -97,5 +97,20 @@
   },
   "sourceTab": {
     "message": "Tab"
+  },
+  "play": {
+    "message": "Play"
+  },
+  "pause": {
+    "message": "Pause"
+  },
+  "replayFromStart": {
+    "message": "Replay from start"
+  },
+  "previousFrame": {
+    "message": "Previous frame (-$1s)"
+  },
+  "nextFrame": {
+    "message": "Next frame (+$1s)"
   }
 }

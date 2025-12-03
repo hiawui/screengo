@@ -97,5 +97,20 @@
   },
   "sourceTab": {
     "message": "分頁"
+  },
+  "play": {
+    "message": "播放"
+  },
+  "pause": {
+    "message": "暫停"
+  },
+  "replayFromStart": {
+    "message": "從頭播放"
+  },
+  "previousFrame": {
+    "message": "上一幀 (-$1秒)"
+  },
+  "nextFrame": {
+    "message": "下一幀 (+$1秒)"
   }
 }

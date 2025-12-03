@@ -97,5 +97,20 @@
   },
   "sourceTab": {
     "message": "Pestaña"
+  },
+  "play": {
+    "message": "Reproducir"
+  },
+  "pause": {
+    "message": "Pausar"
+  },
+  "replayFromStart": {
+    "message": "Reiniciar"
+  },
+  "previousFrame": {
+    "message": "Fotograma anterior (-$1s)"
+  },
+  "nextFrame": {
+    "message": "Siguiente fotograma (+$1s)"
   }
 }
