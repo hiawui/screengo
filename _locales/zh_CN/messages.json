@@ -3,7 +3,7 @@
     "message": "ScreenGo"
   },
   "extensionDescription": {
-    "message": "支持区域选择的屏幕录制扩展"
+    "message": "录制屏幕、标签页或自定义区域，支持音频。可编辑和剪辑录像。快速、隐私、无水印。"
   },
   "startRecording": {
     "message": "开始录制"

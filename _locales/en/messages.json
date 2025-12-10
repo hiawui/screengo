@@ -3,7 +3,7 @@
     "message": "ScreenGo"
   },
   "extensionDescription": {
-    "message": "Screen recording extension with area selection support"
+    "message": "Record screen, tabs, or custom areas with audio. Edit and trim recordings. Fast, private, and watermark-free."
   },
   "startRecording": {
     "message": "Start Recording"
